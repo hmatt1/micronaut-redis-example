@@ -1,0 +1,8 @@
+micronaut:
+  application:
+    name: redis
+
+redis:
+  caches:
+    application:
+      expire-after-write: 2d

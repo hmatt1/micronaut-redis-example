@@ -1,4 +1,16 @@
-FROM adoptopenjdk/openjdk11-openj9:jdk-11.0.1.13-alpine-slim
-COPY build/libs/redis-*-all.jar redis.jar
-EXPOSE 8080
-CMD java -Dcom.sun.management.jmxremote -noverify ${JAVA_OPTS} -jar redis.jar
+FROM openjdk:11 as BUILD_IMAGE
+USER root
+WORKDIR /opt/example
+
+COPY build/distributions/redis-0.1/ /opt/example/
+RUN ls -la /opt/example/
+
+
+FROM openjdk:11
+USER root
+WORKDIR /opt/example
+
+COPY --from=BUILD_IMAGE /opt/example/ /opt/example/
+
+ADD build/distributions/redis-0.1.jar /opt/example/lib/
+
